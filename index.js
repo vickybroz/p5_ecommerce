@@ -42,7 +42,7 @@ app.use('/assets/', express.static(__dirname + '/public'))
 app.set('view engine', 'ejs');
 
 
-let vacio = 
+let vacio =
     {
         id:0,
         nombre: '',
@@ -56,14 +56,14 @@ let vacio =
 app.get('/',(req,res)=> {
     producto.find({}, (err, resultadoProducto) => {
         res.render('products.ejs', {productos:resultadoProducto})
-    })   
+    })
 })
 
 app.get('/producto/:id',(req,res)=> {
     producto.findById({_id:req.params.id}, (err, resultadoProducto) => {
         console.log(resultadoProducto)
         res.render('product.ejs', {product:resultadoProducto})
-    })   
+    })
 })
 
 
@@ -76,7 +76,7 @@ app.post('/cuproducto/:id',urlencodedParser,(req,res)=> {
             (err, result) =>{
             producto.find({}, (err, result) => {
                 console.log(err,result)
-                res.redirect('')
+                res.redirect('/')
             });
         })
     } else {
@@ -89,7 +89,7 @@ app.post('/cuproducto/:id',urlencodedParser,(req,res)=> {
             });
         })
     }
-   
+
 })
 
 
@@ -100,7 +100,7 @@ app.get('/cuproducto/:id',(req,res)=> {
         producto.findById({_id:req.params.id}, (err, productSelected) => {
             // console.log(productSelected)
             res.render('abm.ejs', {product:productSelected})
-        }) 
+        })
     }
 })
 
