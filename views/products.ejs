@@ -1,0 +1,27 @@
+<% include partials/header %>
+              
+              <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                <h1 class="display-4">SUPERcommerce</h1>
+                <p class="lead">Un bello ecommerce que homenajea al example de <code class="highlighter-rouge">Bootstrap </code>pricing, con un monton de productos robados x <a target="_blank" href="https://www.officemax.com.mx/">alli</a>. Cargados en una ESPECTACULAR <code class="highlighter-rouge">MongoDB</code> y traido a sus navegadores gracias a <code class="highlighter-rouge">Node.js</code></p>
+              </div>
+              
+              <div class="container">
+                <div class="row text-center">
+                <% productos.forEach(elem => {  %>
+                    <div class="col-md-4 ">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                            <h4 class="my-0 font-weight-normal"><%= elem.nombre %></h4>
+                            </div>
+                            <div class="card-body">
+                            <h1 class="card-title pricing-card-title">$<%= elem.precio %> <small class="text-muted"></small></h1>
+                            <img src="<%= elem.imagen %>" alt="<%= elem.nombre %>">
+                            <a a href="/producto/<%= elem.id %>" class="btn btn-lg btn-block btn-outline-primary">Ver mas</a>
+                            </div>
+                        </div>
+                        </div>
+                  <% }) %>
+                  </div>
+                </div>
+
+<% include partials/footer %>

@@ -1,0 +1,36 @@
+<% include partials/header %>
+
+<div class="container">
+    <h1 class="mt-5"><%= product.nombre %></h1>
+    <p class="lead"><%= product.descripcion %></p>
+</div>
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+              
+                <div class="card mb-4 shadow-sm">
+                    <img class="p-4" src="<%= product.imagen %>" alt="<%= product.nombre %>">
+                <div class="card-body">
+                  <p class="card-text">$ <%= product.precio %></p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                            <a class="btn btn-sm btn-outline-secondary" href="/cuproducto/<%= product.id %>"> Editar Producto</a>
+                            <a class="btn btn-sm btn-outline-secondary" href="/eliminarproducto/<%= product.id %>"> Eliminar Producto</a>
+                    </div>
+                    <small class="text-muted"> </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- <img src="<%= product.imagen %>" alt="<%= product.nombre %>">
+    <p><%= product.descripcion %></p>
+    <p><strong>$ <%= product.precio %></strong></p>
+
+    <a href="/editarProducto/<%= product.id %>"> Editar Producto</a> -->
+    
+
+<% include partials/footer %>
