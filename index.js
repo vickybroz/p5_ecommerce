@@ -2,9 +2,19 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const multer = require('multer')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1])
+    }
+  })
+  
+  var upload = multer({ storage: storage })
 
 app.listen(80, () => console.log('Listening on port 80'))
-
 mongoose.connect('mongodb://localhost/p5_ecommerce')
 
 const productoModel = mongoose.Schema({
@@ -39,6 +49,7 @@ const producto = mongoose.model('productos', productoModel)
 
 app.use('/assets/', express.static(__dirname + '/public'))
 
+
 app.set('view engine', 'ejs');
 
 
@@ -68,23 +79,24 @@ app.get('/producto/:id',(req,res)=> {
 
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-app.post('/cuproducto/:id',urlencodedParser,(req,res)=> {
-
+app.post('/cuproducto/:id',upload.single('prodimg'), function (req, res, next) {
+    let imagenURL = '/assets/uploads/'+req.file.filename
     if(Number(req.params.id)==0){
         producto.create(
-            {nombre:req.body.nombre, precio:req.body.precio, descripcion:req.body.descripcion, imagen:req.body.imagen},
+            
+            {nombre:req.body.nombre, precio:req.body.precio, descripcion:req.body.descripcion, imagen:imagenURL},
             (err, result) =>{
             producto.find({}, (err, result) => {
-                console.log(err,result)
-                res.redirect('')
+               
+                res.redirect('/')
             });
         })
     } else {
         producto.updateOne(
-            {_id:req.params.id},{nombre:req.body.nombre, precio:req.body.precio, descripcion:req.body.descripcion, imagen:req.body.imagen},
+            {_id:req.params.id},{nombre:req.body.nombre, precio:req.body.precio, descripcion:req.body.descripcion, imagen:imagenURL},
             (err, result) =>{
             producto.find({}, (err, result) => {
-                console.log(err,result)
+                // console.log(err,result)
                 res.redirect('/')
             });
         })
