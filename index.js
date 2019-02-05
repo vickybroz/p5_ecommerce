@@ -23,19 +23,24 @@ const productoModel = mongoose.Schema({
     imagen:{
         type: String,
         default: ''
-    }
+    },
+    comentariosId: [{
+      type: mongoose.Schema.Types.ObjectId, //arreglo de ID
+      ref: "comentarios"            //referencia
+    }]
+})
+
+const comentarioModel = mongoose.Schema({
+  texto: {
+    type: String,
+    require: true,
+    date: { type: Date, default: Date.now }
+  }
+
 })
 
 const producto = mongoose.model('productos', productoModel)
-
-// producto.create(
-//     {nombre:'Lapicera One', precio:50, descripcion:'Negro', imagen:'https://officemax.vteximg.com.br/arquivos/ids/171919-175-175/92220_1.jpg'},
-//     {nombre:'Lapiz', precio:30, descripcion:'Negro', imagen:'https://officemax.vteximg.com.br/arquivos/ids/158696-175-175/32949_1.jpg'},
-//     (err, result) =>{
-//     producto.find({}, (err, result) => {
-//         console.log(err,result)
-//     });
-// })
+const comentario = mongoose.model('comentarios', comentarioModel)
 
 app.use('/assets/', express.static(__dirname + '/public'))
 
@@ -51,6 +56,7 @@ let vacio =
         imagen: ''
     }
 
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 
 app.get('/',(req,res)=> {
@@ -59,15 +65,44 @@ app.get('/',(req,res)=> {
     })
 })
 
+
+//POST comentario
+app.post('/comentario/:id', urlencodedParser, (req, res) => {
+  comentario.create(req.body, (err, newComentario) => {
+    //console.log(newComentario)
+    producto.findById(req.params.id, (err, productOld) => {
+      producto.updateOne({_id:req.params.id}, { comentariosId: [...productOld.comentariosId, newComentario._id ] }, (err, resultadoProducto) => {
+        res.redirect(`/producto/${req.params.id}`)
+      })
+    })
+
+})
+})
+//GET comentarios
+app.get('/comentario/:id', (req,res) =>{
+  producto.findOne({_id:req.params.id}).populate('texto').exec(function (err, doc) {
+          if (err) return handleError(err);
+          console.log(doc)
+        })
+    })
+
+//producto Individual
 app.get('/producto/:id',(req,res)=> {
-    producto.findById({_id:req.params.id}, (err, resultadoProducto) => {
-        console.log(resultadoProducto)
+    producto.findOne({_id:req.params.id}).populate('comentariosId').exec((err, resultadoProducto) => {
+      console.log('result product', resultadoProducto)
         res.render('product.ejs', {product:resultadoProducto})
     })
 })
 
+//nuevo POST para el comentario
+// app.get('/comentario/:id', urlencodedParser, (req, res) => {
+    // producto.findById(req.params.id, (err, resultadoProducto) => {
+    //     console.log(resultadoProducto, req.body)
+    //     // res.redirect(`/producto/${req.params.id}`)
+    // })
+// })
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 app.post('/cuproducto/:id',urlencodedParser,(req,res)=> {
 
     if(Number(req.params.id)==0){

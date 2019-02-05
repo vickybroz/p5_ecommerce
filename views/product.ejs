@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-              
+
                 <div class="card mb-4 shadow-sm">
                     <img class="p-4" src="<%= product.imagen %>" alt="<%= product.nombre %>">
                 <div class="card-body">
@@ -24,6 +24,32 @@
             </div>
         </div>
     </div>
+    <div class="">
+      <h3>
+        <% product.comentariosId.forEach(comment => { %>
+          <div class="">
+            <%= comment.texto %>
+          </div>
+        <% }) %>
+        <!-- <p> comentario.texto %></p> -->
+
+      </h3>
+
+    </div>
+
+<!-- nuevo action a comentario-->
+        <form action="/comentario/<%= product.id %>" method="post">
+          <!-- nuevo action -->
+
+            <div class="mb-3">
+                <label for="texto">Comentario <span class="text-muted"></span></label>
+                <input type="text" class="form-control" name="texto" >
+            </div>
+            <div>
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Guardar">
+            </div>
+        </form>
+
 </div>
 
     <!-- <img src="<%= product.imagen %>" alt="<%= product.nombre %>">
@@ -31,6 +57,6 @@
     <p><strong>$ <%= product.precio %></strong></p>
 
     <a href="/editarProducto/<%= product.id %>"> Editar Producto</a> -->
-    
+
 
 <% include partials/footer %>
