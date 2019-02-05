@@ -76,7 +76,7 @@ app.post('/cuproducto/:id',urlencodedParser,(req,res)=> {
             (err, result) =>{
             producto.find({}, (err, result) => {
                 console.log(err,result)
-                res.redirect('')
+                res.redirect('/')
             });
         })
     } else {
